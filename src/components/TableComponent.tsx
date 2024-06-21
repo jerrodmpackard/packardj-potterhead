@@ -5,13 +5,16 @@ import { IPotterHead } from '@/interfaces/Interfaces';
 import placeholderImage from '../assets/placeholderImage.jpg';
 import ModalComponent from './ModalComponent';
 import { IpcNetConnectOpts } from 'net';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+import FavoritesListComponent from './FavoritesListComponent';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const TableComponent = () => {
     const [potterData, setPotterData] = useState<IPotterHead[]>([]);
     const [currentWizard, setCurrentWizard] = useState<IPotterHead | null>(null);
 
     const [openModal, setOpenModal] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(false);
 
     // UseEffect to fetch data and save to potterData useState variable
     useEffect(() => {
@@ -27,8 +30,20 @@ const TableComponent = () => {
         setCurrentWizard(wizard);
     }
 
+    const handleOpenDrawer = () => {
+        setOpenDrawer(true);
+    }
+
     return (
         <>
+            <>
+                <IconButton edge="start" onClick={() => handleOpenDrawer()}>
+                    <MenuIcon />
+                </IconButton>
+            </>
+            <div className='pb-24'>
+                <h1 className='text-4xl xl:text-7xl text-center'>Harry Potter Directory</h1>
+            </div>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-24'>
                 {/* Ternary to map through potterData and return images and names, or return No Data if none */}
                 {potterData ? (
@@ -45,10 +60,6 @@ const TableComponent = () => {
                             <div className='text-center bg-white rounded-b-xl py-2' key={index}>
                                 {wizard.name}
                             </div>
-
-                            {/* <Button color='primary' onClick={() => handleOpenModal(wizard)}>
-                                Learn More
-                            </Button> */}
                         </div>
 
                     ))
@@ -56,10 +67,11 @@ const TableComponent = () => {
                     <h2>No Data</h2>
                 )
                 }
-                
+
             </div>
 
             {currentWizard && <ModalComponent openModal={openModal} setOpenModal={setOpenModal} currentWizard={currentWizard} />}
+            <FavoritesListComponent openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} currentWizard={currentWizard} />
 
         </>
 
